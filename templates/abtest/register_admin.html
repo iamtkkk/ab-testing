@@ -1,0 +1,121 @@
+{% extends 'layout/layout_login.html' %} {% block title %}Title{% endblock %}
+{%block content %} {% with messages = get_flashed_messages() %} {% if messages
+%}
+<div class="alert alert-success">{{ messages[0] }}</div>
+{% endif %} {% endwith %}
+
+<section class="d-flex justify-content-around container-fluid bc-green vh-100">
+  <div class="container d-flex justify-content-center align-items-center flex-column">
+    <h1 class="text-center tc-green">A/B TESTING</h1>
+    <img
+      src="{{ url_for('static', filename='img/bg-admin-left.png') }}"
+      alt="Leaf"
+      width="600"
+    />
+  </div>
+
+  <div class="container d-flex justify-content-center align-items-center">
+    <div class="shadow-lg p-4 w-75 bg-white" style="border-radius: 18px">
+      {% if success %}
+      <div class="alert alert-success">{{ success }}</div>
+      {% endif %} {% if error %}
+      <div class="alert alert-danger">{{ error }}</div>
+      {% endif %}
+      <h2 class="text-start mb-5">สร้างบัญชีใหม่</h2>
+
+      <form
+        action="{{ url_for('authAPI.register_admin') }}"
+        method="post"
+        id="register-form"
+        class="container"
+      >
+        <div class="form-group">
+          <label for="username" class="h6 form-label">ชื่อผู้ใช้ :</label>
+          <input
+            class="form-control with-line"
+            type="text"
+            name="username"
+            id="username"
+            placeholder="Username"
+            required
+          />
+        <div class="form-group">
+          <label for="email" class="h6 form-label">อีเมล :</label>
+          <input
+            class="form-control with-line"
+            type="text"
+            name="email"
+            id="email"
+            placeholder="Email"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="password" class="h6 form-label">รหัสผ่าน :</label>
+          <input
+            class="form-control with-line"
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Password"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="confirm_password" class="h6 form-label"
+            >ยืนยันรหัสผ่าน :</label
+          >
+          <input
+            class="form-control with-line"
+            type="password"
+            name="confirm_password"
+            id="confirm_password"
+            placeholder="Confirm Password"
+            required
+          />
+          <small id="passwordMatchError" class="text-danger"></small>
+
+        <div
+          class="text-center row justify-content-center"
+          style="margin-top: 3rem"
+        >
+          <button
+            class="btn text-center p-1 fs-4 fw-bold"
+            style="border-radius: 30px; background-color: #5EC57E; color: white"
+            type="submit"
+          >
+            สร้างบัญชี
+          </button>
+        </div>
+      </form>
+
+      <p class="text-center justify-content-center mt-4 fw-bold">
+        <a href="{{ url_for('authAPI.login_admin') }}">เข้าสู่ระบบ </a>
+      </p>
+    </div>
+  </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  document
+    .getElementById("register-form")
+    .addEventListener("submit", function (event) {
+      var password = document.getElementById("password").value;
+      var confirmPassword = document.getElementById("confirm_password").value;
+      var passwordMatchError = document.getElementById("passwordMatchError");
+      if (password !== confirmPassword) {
+        passwordMatchError.textContent = "Passwords do not match";
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Passwords do not match!",
+        });
+        event.preventDefault();
+      } else {
+        passwordMatchError.textContent = "";
+      }
+    });
+</script>
+</section>
+
+{% endblock %}
